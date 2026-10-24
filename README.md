@@ -228,4 +228,4 @@ Tested with the keyboard alone, at 200% text, in light and dark, in Chromium. Sc
 
 ## License
 
-MIT. Atkinson Hyperlegible Next is by the Braille Institute, under the SIL Open Font License 1.1 (`fonts/OFL.txt`).
+MIT. Atkinson Hyperlegible Next is © The Atkinson Hyperlegible Next Project Authors, under the SIL Open Font License 1.1 (`fonts/OFL.txt`).
