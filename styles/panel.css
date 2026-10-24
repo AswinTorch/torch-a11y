@@ -14,7 +14,7 @@
  *   --a11y-shadow    the panel's drop shadow
  *   --a11y-radius    panel corners (default 1.25rem)
  *   --a11y-font      panel font (default: inherits the page's)
- *   --a11y-offset-x, --a11y-offset-y   distance from the corner (default 1rem)
+ *   --a11y-offset-x, --a11y-offset-y   distance from the corner (default 16px)
  *   --a11y-z         stacking order of the button (default 20)
  *   --a11y-link-wash, --a11y-link-ring  highlighted links
  *   --a11y-readable-font                the readable font's family
@@ -112,9 +112,11 @@
     --_fill-hover: var(--a11y-fill-hover, light-dark(rgb(0 0 0 / 0.09), rgb(255 255 255 / 0.14)));
     --_knob: var(--a11y-knob, light-dark(#ffffff, #e5e5ea));
     --_ring: 2px;
-    --_x: max(var(--a11y-offset-x, 1rem), calc(env(safe-area-inset-left) + 0.5rem));
-    --_x-end: max(var(--a11y-offset-x, 1rem), calc(env(safe-area-inset-right) + 0.5rem));
-    --_y: max(var(--a11y-offset-y, 1rem), calc(env(safe-area-inset-bottom) + 0.5rem));
+    /* Gaps around the edges stay in px: at 200% text a phone needs every
+       pixel for the text itself. */
+    --_x: max(var(--a11y-offset-x, 16px), calc(env(safe-area-inset-left) + 8px));
+    --_x-end: max(var(--a11y-offset-x, 16px), calc(env(safe-area-inset-right) + 8px));
+    --_y: max(var(--a11y-offset-y, 16px), calc(env(safe-area-inset-bottom) + 8px));
     --_ease: cubic-bezier(0.23, 1, 0.32, 1);
     font-family: var(--a11y-font, inherit);
     -webkit-font-smoothing: antialiased;
@@ -235,7 +237,7 @@
   }
 
   [data-torch-a11y="panel"] [data-part="body"] {
-    padding: 1rem 1rem 1.125rem;
+    padding: 16px 16px 18px;
     font-size: 0.9375rem;
     line-height: 1.35;
   }
@@ -279,11 +281,14 @@
     height: 0.875rem;
   }
 
+  /* Rows wrap, so at large text on a phone the stepper drops below its
+     label instead of pushing the panel sideways. */
   [data-torch-a11y="panel"] [data-part="row"] {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.5rem 1rem;
     padding-block: 0.75rem;
     border-top: 1px solid var(--_line);
   }
@@ -317,7 +322,7 @@
   [data-torch-a11y="panel"] [data-part="stepper"] button {
     display: grid;
     place-items: center;
-    width: 2.5rem;
+    width: 2.25rem;
     height: 2.25rem;
     padding: 0;
     border-radius: 999px;
@@ -334,7 +339,7 @@
     font-size: 1.0625rem;
   }
   [data-torch-a11y="panel"] [data-part="stepper"] output {
-    min-width: 3.25rem;
+    min-width: 3rem;
     text-align: center;
     font-size: 0.875rem;
     font-weight: 500;

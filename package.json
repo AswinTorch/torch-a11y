@@ -38,8 +38,9 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "demo": "bun run build && bun --cwd demo run dev",
-    "prepublishOnly": "bun run typecheck && bun run test && bun run build"
+    "demo": "bun run demo:pack && cd demo && bun run dev",
+    "prepublishOnly": "bun run typecheck && bun run test && bun run build",
+    "demo:pack": "bun run build && rm -rf demo/.pkg && mkdir -p demo/.pkg && npm pack --pack-destination demo/.pkg >/dev/null && cd demo && bun install && rm -rf node_modules/torch-a11y && mkdir -p node_modules/torch-a11y && tar -xzf .pkg/torch-a11y-*.tgz -C node_modules/torch-a11y --strip-components=1 && find node_modules/torch-a11y -exec touch {} +"
   },
   "keywords": [
     "accessibility",

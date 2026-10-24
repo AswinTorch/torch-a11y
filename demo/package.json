@@ -1,0 +1,24 @@
+{
+  "name": "torch-a11y-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3130",
+    "build": "vite build",
+    "preview": "vite preview --port 3130"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "torch-a11y": "file:.pkg/torch-a11y-0.1.0.tgz"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.5"
+  }
+}
