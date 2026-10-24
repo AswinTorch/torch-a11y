@@ -22,7 +22,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "torch-a11y": "./dist/cli.js"
+    "torch-a11y": "dist/cli.js"
   },
   "files": [
     "dist",
