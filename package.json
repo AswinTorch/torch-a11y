@@ -1,0 +1,86 @@
+{
+  "name": "torch-a11y",
+  "version": "0.1.0",
+  "description": "A small accessibility preferences panel for websites: text size, high contrast, reduced motion, highlighted links and a readable font. Applied before first paint, themed from your CSS variables, with an agent skill that prepares your codebase for it.",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
+    },
+    "./panel.css": "./styles/panel.css",
+    "./tailwind.css": "./styles/tailwind.css",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "torch-a11y": "./bin/torch-a11y.mjs"
+  },
+  "files": [
+    "dist",
+    "styles",
+    "fonts",
+    "bin",
+    "skills",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "demo": "bun run build && bun --cwd demo run dev",
+    "prepublishOnly": "bun run typecheck && bun run test && bun run build"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "react",
+    "nextjs",
+    "high-contrast",
+    "reduced-motion",
+    "text-size",
+    "dyslexia",
+    "tailwindcss",
+    "preferences"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AswinTorch/torch-a11y.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AswinTorch/torch-a11y/issues"
+  },
+  "author": "Aswin Nair <aswintorch@gmail.com> (https://github.com/AswinTorch)",
+  "license": "MIT",
+  "homepage": "https://github.com/AswinTorch/torch-a11y#readme",
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "jsdom": "^26",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tsup": "^9.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5"
+  }
+}

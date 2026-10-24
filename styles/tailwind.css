@@ -1,0 +1,58 @@
+/*
+ * torch-a11y for Tailwind CSS v4. Import it after tailwindcss:
+ *
+ *   @import "tailwindcss";
+ *   @import "torch-a11y/tailwind.css";
+ *
+ * It redefines Tailwind's own motion-reduce, motion-safe and contrast-more
+ * variants so they follow the panel, which defaults to the system setting.
+ * Utilities you already have (motion-reduce:animate-none) and
+ * `@variant motion-reduce { ... }` in your CSS just work. Without JS there's
+ * no data attribute, so the media query applies directly. Specificity is
+ * the same as the built-in variants (:where).
+ */
+
+@custom-variant motion-reduce {
+  &:where([data-a11y-motion="reduce"], [data-a11y-motion="reduce"] *) {
+    @slot;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &:where(:root:not([data-a11y-motion]), :root:not([data-a11y-motion]) *) {
+      @slot;
+    }
+  }
+}
+
+@custom-variant motion-safe {
+  &:where([data-a11y-motion="no-preference"], [data-a11y-motion="no-preference"] *) {
+    @slot;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    &:where(:root:not([data-a11y-motion]), :root:not([data-a11y-motion]) *) {
+      @slot;
+    }
+  }
+}
+
+@custom-variant contrast-more {
+  &:where([data-a11y-contrast="more"], [data-a11y-contrast="more"] *) {
+    @slot;
+  }
+  @media (prefers-contrast: more) {
+    &:where(:root:not([data-a11y-contrast]), :root:not([data-a11y-contrast]) *) {
+      @slot;
+    }
+  }
+}
+
+/* For tweaks while links are highlighted or the readable font is on. */
+@custom-variant a11y-links {
+  &:where([data-a11y-links], [data-a11y-links] *) {
+    @slot;
+  }
+}
+@custom-variant a11y-font {
+  &:where([data-a11y-font], [data-a11y-font] *) {
+    @slot;
+  }
+}
