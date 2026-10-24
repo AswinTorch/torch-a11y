@@ -201,7 +201,7 @@ The panel follows your color scheme and reads these variables, on `:root` or any
 
 Also: `--a11y-fill`, `--a11y-fill-hover`, `--a11y-knob`, `--a11y-shadow`, `--a11y-radius`, `--a11y-font`, `--a11y-offset-x`, `--a11y-offset-y`, `--a11y-z`, `--a11y-link-wash`, `--a11y-link-ring`, `--a11y-readable-font`.
 
-The panel's styles sit in `@layer torch-a11y`, so any rule of yours wins. Its parts carry `data-torch-a11y` and `data-part` attributes to target.
+The panel's parts carry `data-torch-a11y` and `data-part` attributes. Its rules key off those, so your site's bare element rules (`button { ... }`) don't leak in; target the attributes to restyle a part on purpose.
 
 What you can't turn off: the dialog's focus handling, its labels and roles, and the contrast floor in high contrast mode. Those are the point.
 

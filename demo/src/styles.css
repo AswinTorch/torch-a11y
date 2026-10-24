@@ -2,32 +2,21 @@
 @import "torch-a11y/tailwind.css";
 @import "torch-a11y/panel.css";
 
-/* The house style: system SF type, light-dark() tokens, tinted tiles. This
-   page also follows torch-a11y's contract: rem text, token colors with
-   high-contrast values, and motion keyed to the panel. */
+/* A plain docs page that follows torch-a11y's own contract: rem text,
+   token colors with high-contrast values, no motion to reduce. */
 :root {
   color-scheme: light dark;
-  --bg: light-dark(#fafafa, #0b0b0b);
-  --fg: light-dark(#111111, #f2f2f2);
-  --fg-muted: light-dark(#6e6e73, #8a8a8f);
-  --surface: light-dark(#ffffff, #161616);
-  --hairline: light-dark(rgb(0 0 0 / 0.08), rgb(255 255 255 / 0.08));
-  --fill: light-dark(rgb(0 0 0 / 0.05), rgb(255 255 255 / 0.08));
-  --fill-hover: light-dark(rgb(0 0 0 / 0.08), rgb(255 255 255 / 0.12));
-  --code: light-dark(#f2f2f4, #121214);
+  --bg: light-dark(#ffffff, #0b0b0b);
+  --fg: light-dark(#111111, #ededed);
+  --fg-muted: light-dark(#6e6e73, #8f8f94);
+  --hairline: light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1));
+  --code: light-dark(#f5f5f7, #161616);
   --ring-width: 2px;
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
 
-  /* The panel, in the page's own colors. */
-  --a11y-surface: var(--surface);
+  --a11y-surface: light-dark(#ffffff, #161616);
   --a11y-fg: var(--fg);
   --a11y-muted: var(--fg-muted);
   --a11y-line: var(--hairline);
-  --a11y-fill: var(--fill);
-  --a11y-fill-hover: var(--fill-hover);
 }
 :root[data-theme="light"] {
   color-scheme: light;
@@ -35,298 +24,117 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 }
-
-/* High contrast: the same tokens, pushed apart. Text clears 7:1 and
-   borders 3:1 in both themes. */
 :root[data-a11y-contrast="more"] {
   --bg: light-dark(#ffffff, #000000);
   --fg: light-dark(#000000, #ffffff);
   --fg-muted: light-dark(#3a3a3c, #d1d1d6);
-  --surface: light-dark(#ffffff, #000000);
   --hairline: light-dark(rgb(0 0 0 / 0.55), rgb(255 255 255 / 0.6));
-  --fill: light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.18));
-  --fill-hover: light-dark(rgb(0 0 0 / 0.16), rgb(255 255 255 / 0.26));
   --code: light-dark(#ffffff, #000000);
   --ring-width: 3px;
+  --a11y-surface: light-dark(#ffffff, #000000);
 }
 
 html {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;
-  scroll-padding-top: 4.5rem;
-  @variant motion-reduce {
-    scroll-behavior: auto;
-  }
 }
 body {
   background: var(--bg);
 }
-::selection {
-  background: light-dark(rgb(0 113 227 / 0.18), rgb(41 151 255 / 0.3));
-}
-button:not(:disabled),
-[role="button"] {
-  cursor: pointer;
+
+.page {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 0;
 }
 
-/* ── Type ramp: tracking tightens as size grows ─────────────────────────── */
-/* Fluid sizes scale their vw term too, or text size would barely move them. */
-.display {
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 9vw * var(--a11y-text-scale, 1), 5.5rem);
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.045em;
-}
-.title {
-  font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw * var(--a11y-text-scale, 1), 2.5rem);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-}
-.lede {
-  font-size: clamp(1.125rem, 2.2vw * var(--a11y-text-scale, 1), 1.3125rem);
-  line-height: 1.45;
-  letter-spacing: -0.012em;
-  color: var(--fg-muted);
-}
-
-/* ── Buttons ────────────────────────────────────────────────────────────── */
-.pill {
-  transition:
-    transform 160ms var(--ease-out),
-    opacity 200ms ease,
-    background-color 200ms ease;
-}
-.pill:active {
-  transform: scale(0.97);
-}
-.pill-primary {
-  background: var(--fg);
-  color: var(--bg);
-}
-.pill-secondary {
-  background: var(--fill);
-  color: var(--fg);
+a,
+.text-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--hairline);
+  text-underline-offset: 0.2em;
 }
 @media (hover: hover) and (pointer: fine) {
-  .pill-primary:hover {
-    opacity: 0.85;
-  }
-  .pill-secondary:hover {
-    background: var(--fill-hover);
+  a:hover,
+  .text-link:hover {
+    text-decoration-color: currentColor;
   }
 }
-.icon-button {
-  transition:
-    transform 160ms var(--ease-out),
-    color 200ms ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .icon-button:hover {
-    color: var(--fg);
-  }
-}
-.icon-button:active {
-  transform: scale(0.92);
-}
-.link {
-  color: var(--fg-muted);
-  transition: color 200ms ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .link:hover {
-    color: var(--fg);
-  }
-}
-:is(.pill, .icon-button, .link, .card):focus-visible {
+:is(a, button):not([data-torch-a11y], [data-torch-a11y] *):focus-visible {
   outline: var(--ring-width) solid var(--fg);
   outline-offset: 2px;
+  border-radius: 0.25rem;
 }
 
-/* ── Theme toggle: light shows the moon, dark the sun ──────────────────── */
-.theme-toggle .icon {
-  grid-area: 1 / 1;
-  transition:
-    opacity 200ms ease,
-    transform 280ms var(--ease-out);
+code {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+  font-size: 0.875em;
 }
-.icon-sun {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.6);
-}
-:root[data-theme="dark"] .icon-moon {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.6);
-}
-:root[data-theme="dark"] .icon-sun {
-  opacity: 1;
-  transform: none;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .icon-moon {
-    opacity: 0;
-    transform: rotate(90deg) scale(0.6);
-  }
-  :root:not([data-theme="light"]) .icon-sun {
-    opacity: 1;
-    transform: none;
-  }
+p code,
+dd code {
+  padding: 0.0625rem 0.3rem;
+  border-radius: 0.3rem;
+  background: var(--code);
+  overflow-wrap: anywhere;
 }
 
-/* ── Setting tiles ─────────────────────────────────────────────────────── */
-/* Soft tinted surface with a light falloff, per-setting hue. */
-.tile {
-  position: relative;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  aspect-ratio: 16 / 10;
-  border-radius: 1.25rem;
-  background:
-    radial-gradient(
-      120% 100% at 30% 15%,
-      light-dark(hsl(var(--hue) 50% 96% / 0.95), hsl(var(--hue) 28% 24% / 0.9)),
-      transparent 62%
-    ),
-    light-dark(hsl(var(--hue) 32% 88%), hsl(var(--hue) 18% 13%));
-  transition:
-    transform 240ms var(--ease-out),
-    box-shadow 240ms var(--ease-out);
-}
-@media (min-width: 640px) {
-  .tile {
-    aspect-ratio: 4 / 3;
-  }
-}
-/* High contrast: an outline gives each tile a hard edge. */
-:root[data-a11y-contrast="more"] .tile {
+.code {
+  overflow-x: auto;
+  padding: 1rem 1.125rem;
+  border-radius: 0.75rem;
+  background: var(--code);
   box-shadow: inset 0 0 0 1px var(--hairline);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.command {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-top: 1.5rem;
+  padding: 0.625rem 0.75rem 0.625rem 1.125rem;
+  border-radius: 0.75rem;
+  background: var(--code);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+}
+.command button {
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fg-muted);
 }
 @media (hover: hover) and (pointer: fine) {
-  .card:hover .tile {
-    transform: translateY(-4px);
-    box-shadow:
-      inset 0 1px 0 light-dark(transparent, rgb(255 255 255 / 0.06)),
-      0 1px 2px light-dark(rgb(0 0 0 / 0.04), transparent),
-      0 16px 40px -12px light-dark(rgb(0 0 0 / 0.18), rgb(0 0 0 / 0.6));
-  }
-}
-.card:active .tile {
-  transform: scale(0.98);
-  transition-duration: 100ms;
-}
-.card:focus-visible {
-  outline-offset: 4px;
-  border-radius: 1.25rem;
-}
-.card .tile,
-.card:hover .tile,
-.card:active .tile {
-  @variant motion-reduce {
-    transform: none;
-    transition: box-shadow 200ms ease;
+  .command button:hover {
+    color: var(--fg);
   }
 }
 
-/* The on/off chip under each tile. */
-.state {
-  font-size: 0.75rem;
+.contract {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.75rem 1.5rem;
+}
+.contract dt {
   font-weight: 600;
-  padding: 0.125rem 0.5rem;
-  border-radius: 999px;
-  background: var(--fill);
-  color: var(--fg-muted);
-  transition:
-    background-color 200ms ease,
-    color 200ms ease;
 }
-[aria-pressed="true"] .state {
-  background: var(--fg);
-  color: var(--bg);
-}
-
-/* Reduce motion's tile: three dots that bounce, and rest when it's on. */
-.dots span {
-  display: block;
-  width: 0.875rem;
-  height: 0.875rem;
-  border-radius: 999px;
-  background: var(--fg);
-  animation: bounce 900ms var(--ease-out) infinite alternate;
-  animation-delay: calc(var(--i) * 150ms);
-}
-@keyframes bounce {
-  to {
-    transform: translateY(-1.25rem);
-  }
-}
-.dots span {
-  @variant motion-reduce {
-    animation: none;
-  }
-}
-
-/* Contrast tile: muted text on a card, which darkens in high contrast. */
-.sample-card {
-  background: var(--surface);
-  border-radius: 0.875rem;
-  box-shadow:
-    0 0 0 1px var(--hairline),
-    0 12px 24px -12px light-dark(rgb(0 0 0 / 0.25), rgb(0 0 0 / 0.7));
-}
-
-/* Links tile: stand-ins for links (a button can't hold real ones), drawn
-   the way panel.css draws links when highlighting is on. */
-.demo-link {
-  text-decoration-line: underline;
-  text-decoration-color: var(--hairline);
-  text-decoration-thickness: 1px;
-}
-:root[data-a11y-links] .demo-link {
-  text-decoration-color: currentColor;
-  text-decoration-thickness: 0.125em;
-  text-underline-offset: 0.22em;
-  background-color: var(--a11y-link-wash-default);
-  border-radius: 0.25em;
-}
-
-/* ── Code ──────────────────────────────────────────────────────────────── */
-.code {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  line-height: 1.65;
-  background: var(--code);
-  border-radius: 1rem;
-  box-shadow: inset 0 0 0 1px var(--hairline);
-}
-.code .k {
+.contract dd {
   color: var(--fg-muted);
 }
-
-/* ── Contract rows ─────────────────────────────────────────────────────── */
-.row {
-  border-bottom: 1px solid var(--hairline);
-}
-
-/* ── Entrance ──────────────────────────────────────────────────────────── */
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
+/* One column when there isn't room for two, like large text on a phone. */
+@media (max-width: 30rem) {
+  .contract {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
   }
-}
-.rise {
-  animation: rise 600ms var(--ease-out) backwards;
-  animation-delay: calc(var(--i, 0) * 70ms);
-}
-.rise {
-  @variant motion-reduce {
-    animation: none;
+  .contract dd {
+    margin-bottom: 0.75rem;
   }
 }

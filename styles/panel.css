@@ -19,8 +19,9 @@
  *   --a11y-link-wash, --a11y-link-ring  highlighted links
  *   --a11y-readable-font                the readable font's family
  *
- * The panel's own styles live in @layer torch-a11y, so any rule of yours
- * wins without fighting specificity.
+ * The panel's parts carry data-torch-a11y and data-part attributes. Its
+ * rules use those, so a site's bare element rules (button { ... }) don't
+ * reach it; target the attributes to restyle a part on purpose.
  */
 
 /* ── Readable font ─────────────────────────────────────────────────────── */
@@ -102,351 +103,351 @@
 }
 
 /* ── The button and the panel ──────────────────────────────────────────── */
-@layer torch-a11y {
-  [data-torch-a11y] {
-    --_surface: var(--a11y-surface, light-dark(#ffffff, #1c1c1e));
-    --_fg: var(--a11y-fg, light-dark(#1d1d1f, #f5f5f7));
-    --_muted: var(--a11y-muted, light-dark(#6e6e73, #a1a1a6));
-    --_line: var(--a11y-line, light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.12)));
-    --_fill: var(--a11y-fill, light-dark(rgb(0 0 0 / 0.05), rgb(255 255 255 / 0.08)));
-    --_fill-hover: var(--a11y-fill-hover, light-dark(rgb(0 0 0 / 0.09), rgb(255 255 255 / 0.14)));
-    --_knob: var(--a11y-knob, light-dark(#ffffff, #e5e5ea));
-    --_ring: 2px;
-    /* Gaps around the edges stay in px: at 200% text a phone needs every
-       pixel for the text itself. */
-    --_x: max(var(--a11y-offset-x, 16px), calc(env(safe-area-inset-left) + 8px));
-    --_x-end: max(var(--a11y-offset-x, 16px), calc(env(safe-area-inset-right) + 8px));
-    --_y: max(var(--a11y-offset-y, 16px), calc(env(safe-area-inset-bottom) + 8px));
-    --_ease: cubic-bezier(0.23, 1, 0.32, 1);
-    font-family: var(--a11y-font, inherit);
-    -webkit-font-smoothing: antialiased;
-    -webkit-tap-highlight-color: transparent;
-  }
-  /* High contrast reaches the panel too, even if the site's tokens don't. */
-  :root[data-a11y-contrast="more"] [data-torch-a11y] {
-    --_surface: var(--a11y-surface, light-dark(#ffffff, #000000));
-    --_fg: var(--a11y-fg, light-dark(#000000, #ffffff));
-    --_muted: var(--a11y-muted, light-dark(#3a3a3c, #d1d1d6));
-    --_line: var(--a11y-line, light-dark(rgb(0 0 0 / 0.55), rgb(255 255 255 / 0.6)));
-    --_fill: var(--a11y-fill, light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.18)));
-    --_fill-hover: var(--a11y-fill-hover, light-dark(rgb(0 0 0 / 0.16), rgb(255 255 255 / 0.26)));
-    --_ring: 3px;
-  }
+[data-torch-a11y] {
+  --_surface: var(--a11y-surface, light-dark(#ffffff, #1c1c1e));
+  --_fg: var(--a11y-fg, light-dark(#1d1d1f, #f5f5f7));
+  --_muted: var(--a11y-muted, light-dark(#6e6e73, #a1a1a6));
+  --_line: var(--a11y-line, light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.12)));
+  --_fill: var(--a11y-fill, light-dark(rgb(0 0 0 / 0.05), rgb(255 255 255 / 0.08)));
+  --_fill-hover: var(--a11y-fill-hover, light-dark(rgb(0 0 0 / 0.09), rgb(255 255 255 / 0.14)));
+  --_knob: var(--a11y-knob, light-dark(#ffffff, #e5e5ea));
+  --_ring: 2px;
+  /* Gaps around the edges stay in px: at 200% text a phone needs every
+     pixel for the text itself. */
+  --_x: max(var(--a11y-offset-x, 16px), calc(env(safe-area-inset-left) + 8px));
+  --_x-end: max(var(--a11y-offset-x, 16px), calc(env(safe-area-inset-right) + 8px));
+  --_y: max(var(--a11y-offset-y, 16px), calc(env(safe-area-inset-bottom) + 8px));
+  --_ease: cubic-bezier(0.23, 1, 0.32, 1);
+  font-family: var(--a11y-font, inherit);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+/* High contrast reaches the panel too, even if the site's tokens don't. */
+:root[data-a11y-contrast="more"] [data-torch-a11y] {
+  --_surface: var(--a11y-surface, light-dark(#ffffff, #000000));
+  --_fg: var(--a11y-fg, light-dark(#000000, #ffffff));
+  --_muted: var(--a11y-muted, light-dark(#3a3a3c, #d1d1d6));
+  --_line: var(--a11y-line, light-dark(rgb(0 0 0 / 0.55), rgb(255 255 255 / 0.6)));
+  --_fill: var(--a11y-fill, light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.18)));
+  --_fill-hover: var(--a11y-fill-hover, light-dark(rgb(0 0 0 / 0.16), rgb(255 255 255 / 0.26)));
+  --_ring: 3px;
+}
 
-  /* The round button in the corner. Sizes are rem, so it grows with text. */
-  [data-torch-a11y="trigger"] {
-    all: unset;
-    box-sizing: border-box;
-    position: fixed;
-    bottom: var(--_y);
-    left: var(--_x);
-    z-index: var(--a11y-z, 20);
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 999px;
-    color: var(--_fg);
-    background: var(--_surface);
-    box-shadow:
-      0 0 0 1px var(--_line),
-      0 6px 16px -6px light-dark(rgb(0 0 0 / 0.25), rgb(0 0 0 / 0.6));
-    cursor: pointer;
-    transition: transform 160ms var(--_ease);
-  }
-  [data-torch-a11y="trigger"][data-position="bottom-right"] {
-    left: auto;
-    right: var(--_x-end);
-  }
-  [data-torch-a11y="trigger"] svg {
-    width: 1.375rem;
-    height: 1.375rem;
-  }
-  [data-torch-a11y="trigger"]:active {
-    transform: scale(0.92);
-  }
-  [data-torch-a11y="trigger"]:focus-visible {
-    outline: var(--_ring) solid var(--_fg);
-    outline-offset: 2px;
-  }
+/* The round button in the corner. Sizes are rem, so it grows with text. */
+[data-torch-a11y="trigger"] {
+  all: unset;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: var(--_y);
+  left: var(--_x);
+  z-index: var(--a11y-z, 20);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  color: var(--_fg);
+  background: var(--_surface);
+  box-shadow:
+    0 0 0 1px var(--_line),
+    0 6px 16px -6px light-dark(rgb(0 0 0 / 0.25), rgb(0 0 0 / 0.6));
+  cursor: pointer;
+  transition: transform 160ms var(--_ease);
+}
+[data-torch-a11y="trigger"][data-position="bottom-right"] {
+  left: auto;
+  right: var(--_x-end);
+}
+[data-torch-a11y="trigger"] svg {
+  width: 1.375rem;
+  height: 1.375rem;
+}
+[data-torch-a11y="trigger"]:active {
+  transform: scale(0.92);
+}
+[data-torch-a11y="trigger"]:focus-visible {
+  outline: var(--_ring) solid var(--_fg);
+  outline-offset: 2px;
+  /* Holds its shape against a site's own focus styles. */
+  border-radius: 999px;
+}
 
-  /* The panel opens above the button and grows out of it. */
-  [data-torch-a11y="panel"] {
-    position: fixed;
-    inset: auto auto calc(var(--_y) + 3.25rem) var(--_x);
-    box-sizing: border-box;
-    width: min(20rem, calc(100vw - 2 * var(--_x)));
-    max-width: none;
-    max-height: calc(100dvh - var(--_y) - 4.25rem);
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: var(--a11y-radius, 1.25rem);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    color: var(--_fg);
-    background: var(--_surface);
-    box-shadow:
-      0 0 0 1px var(--_line),
-      var(--a11y-shadow, 0 24px 48px -16px light-dark(rgb(0 0 0 / 0.3), rgb(0 0 0 / 0.7)));
-    transform-origin: 0 100%;
-    --_from: translateY(0.5rem) scale(0.96);
-    transition:
-      opacity 180ms var(--_ease),
-      transform 180ms var(--_ease),
-      overlay 180ms allow-discrete,
-      display 180ms allow-discrete;
-  }
-  [data-torch-a11y="panel"][data-position="bottom-right"] {
-    inset: auto var(--_x-end) calc(var(--_y) + 3.25rem) auto;
-    transform-origin: 100% 100%;
-  }
-  /* With your own button somewhere else, it opens in the middle. */
-  [data-torch-a11y="panel"][data-trigger="none"] {
-    inset: 0;
-    margin: auto;
-    height: fit-content;
-    max-height: calc(100dvh - 2rem);
-    transform-origin: 50% 50%;
-  }
-  [data-torch-a11y="panel"]::backdrop {
-    background: transparent;
-  }
-  [data-torch-a11y="panel"][data-trigger="none"]::backdrop {
-    background: rgb(0 0 0 / 0.2);
-  }
-  [data-torch-a11y="panel"]:not([open]) {
+/* The panel opens above the button and grows out of it. */
+[data-torch-a11y="panel"] {
+  position: fixed;
+  inset: auto auto calc(var(--_y) + 3.25rem) var(--_x);
+  box-sizing: border-box;
+  width: min(20rem, calc(100vw - 2 * var(--_x)));
+  max-width: none;
+  max-height: calc(100dvh - var(--_y) - 4.25rem);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--a11y-radius, 1.25rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: var(--_fg);
+  background: var(--_surface);
+  box-shadow:
+    0 0 0 1px var(--_line),
+    var(--a11y-shadow, 0 24px 48px -16px light-dark(rgb(0 0 0 / 0.3), rgb(0 0 0 / 0.7)));
+  transform-origin: 0 100%;
+  --_from: translateY(0.5rem) scale(0.96);
+  transition:
+    opacity 180ms var(--_ease),
+    transform 180ms var(--_ease),
+    overlay 180ms allow-discrete,
+    display 180ms allow-discrete;
+}
+[data-torch-a11y="panel"][data-position="bottom-right"] {
+  inset: auto var(--_x-end) calc(var(--_y) + 3.25rem) auto;
+  transform-origin: 100% 100%;
+}
+/* With your own button somewhere else, it opens in the middle. */
+[data-torch-a11y="panel"][data-trigger="none"] {
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+  max-height: calc(100dvh - 2rem);
+  transform-origin: 50% 50%;
+}
+[data-torch-a11y="panel"]::backdrop {
+  background: transparent;
+}
+[data-torch-a11y="panel"][data-trigger="none"]::backdrop {
+  background: rgb(0 0 0 / 0.2);
+}
+[data-torch-a11y="panel"]:not([open]) {
+  opacity: 0;
+  transform: var(--_from);
+  transition-duration: 120ms;
+}
+@starting-style {
+  [data-torch-a11y="panel"][open] {
     opacity: 0;
     transform: var(--_from);
-    transition-duration: 120ms;
   }
-  @starting-style {
-    [data-torch-a11y="panel"][open] {
-      opacity: 0;
-      transform: var(--_from);
-    }
-  }
-  /* Reduced motion: a fade, no movement. */
-  :root[data-a11y-motion="reduce"] [data-torch-a11y="panel"] {
+}
+/* Reduced motion: a fade, no movement. */
+:root[data-a11y-motion="reduce"] [data-torch-a11y="panel"] {
+  --_from: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-a11y-motion]) [data-torch-a11y="panel"] {
     --_from: none;
   }
-  @media (prefers-reduced-motion: reduce) {
-    :root:not([data-a11y-motion]) [data-torch-a11y="panel"] {
-      --_from: none;
-    }
-  }
+}
 
-  [data-torch-a11y="panel"] [data-part="body"] {
-    padding: 16px 16px 18px;
-    font-size: 0.9375rem;
-    line-height: 1.35;
-  }
-  [data-torch-a11y="panel"] [data-part="header"] {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-  }
-  [data-torch-a11y="panel"] [data-part="title"] {
-    margin: 0;
-    font-size: 1.0625rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-  }
-  [data-torch-a11y="panel"] button {
-    font: inherit;
-    color: inherit;
-    border: 0;
-    margin: 0;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  [data-torch-a11y="panel"] [data-part="close"] {
-    display: grid;
-    place-items: center;
-    width: 2rem;
-    height: 2rem;
-    margin-right: -0.25rem;
-    padding: 0;
-    border-radius: 999px;
-    color: var(--_muted);
-    background: var(--_fill);
-    transition:
-      transform 160ms var(--_ease),
-      color 200ms ease;
-  }
-  [data-torch-a11y="panel"] [data-part="close"] svg {
-    width: 0.875rem;
-    height: 0.875rem;
-  }
+[data-torch-a11y="panel"] [data-part="body"] {
+  padding: 16px 16px 18px;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+[data-torch-a11y="panel"] [data-part="header"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+[data-torch-a11y="panel"] [data-part="title"] {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+[data-torch-a11y="panel"] button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  margin: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+[data-torch-a11y="panel"] [data-part="close"] {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  margin-right: -0.25rem;
+  padding: 0;
+  border-radius: 999px;
+  color: var(--_muted);
+  background: var(--_fill);
+  transition:
+    transform 160ms var(--_ease),
+    color 200ms ease;
+}
+[data-torch-a11y="panel"] [data-part="close"] svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
 
-  /* Rows wrap, so at large text on a phone the stepper drops below its
-     label instead of pushing the panel sideways. */
-  [data-torch-a11y="panel"] [data-part="row"] {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem 1rem;
-    padding-block: 0.75rem;
-    border-top: 1px solid var(--_line);
-  }
-  [data-torch-a11y="panel"] [data-switch-row] {
-    cursor: pointer;
-  }
-  [data-torch-a11y="panel"] [data-part="text"] {
-    min-width: 0;
-    flex: 1;
-  }
-  [data-torch-a11y="panel"] [data-part="label"] {
-    display: block;
-    font-weight: 500;
-  }
-  [data-torch-a11y="panel"] [data-part="hint"] {
-    display: block;
-    margin-top: 0.125rem;
-    font-size: 0.8125rem;
-    line-height: 1.35;
-    color: var(--_muted);
-  }
+/* Rows wrap, so at large text on a phone the stepper drops below its
+   label instead of pushing the panel sideways. */
+[data-torch-a11y="panel"] [data-part="row"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-block: 0.75rem;
+  border-top: 1px solid var(--_line);
+}
+[data-torch-a11y="panel"] [data-switch-row] {
+  cursor: pointer;
+}
+[data-torch-a11y="panel"] [data-part="text"] {
+  min-width: 0;
+  flex: 1;
+}
+[data-torch-a11y="panel"] [data-part="label"] {
+  display: block;
+  font-weight: 500;
+}
+[data-torch-a11y="panel"] [data-part="hint"] {
+  display: block;
+  margin-top: 0.125rem;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: var(--_muted);
+}
 
-  /* A− 100% A+: one pill, split three ways. */
-  [data-torch-a11y="panel"] [data-part="stepper"] {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    border-radius: 999px;
-    background: var(--_fill);
-  }
-  [data-torch-a11y="panel"] [data-part="stepper"] button {
-    display: grid;
-    place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    padding: 0;
-    border-radius: 999px;
-    font-weight: 600;
-    background: transparent;
-    transition:
-      transform 160ms var(--_ease),
-      opacity 200ms ease;
-  }
-  [data-torch-a11y="panel"] [data-part="a-small"] {
-    font-size: 0.8125rem;
-  }
-  [data-torch-a11y="panel"] [data-part="a-large"] {
-    font-size: 1.0625rem;
-  }
-  [data-torch-a11y="panel"] [data-part="stepper"] output {
-    min-width: 3rem;
-    text-align: center;
-    font-size: 0.875rem;
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
-  }
+/* A− 100% A+: one pill, split three ways. */
+[data-torch-a11y="panel"] [data-part="stepper"] {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--_fill);
+}
+[data-torch-a11y="panel"] [data-part="stepper"] button {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 999px;
+  font-weight: 600;
+  background: transparent;
+  transition:
+    transform 160ms var(--_ease),
+    opacity 200ms ease;
+}
+[data-torch-a11y="panel"] [data-part="a-small"] {
+  font-size: 0.8125rem;
+}
+[data-torch-a11y="panel"] [data-part="a-large"] {
+  font-size: 1.0625rem;
+}
+[data-torch-a11y="panel"] [data-part="stepper"] output {
+  min-width: 3rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
 
-  /* A native checkbox drawn as a switch. Off: a soft track and a light
-     knob. On: the text color fills the track and the knob takes the
-     surface color. */
-  [data-torch-a11y="panel"] [data-part="switch"] {
-    appearance: none;
-    position: relative;
-    flex-shrink: 0;
-    width: 2.875rem;
-    height: 1.75rem;
-    margin: 0;
-    border-radius: 999px;
+/* A native checkbox drawn as a switch. Off: a soft track and a light
+   knob. On: the text color fills the track and the knob takes the
+   surface color. */
+[data-torch-a11y="panel"] [data-part="switch"] {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 2.875rem;
+  height: 1.75rem;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--_fill-hover);
+  box-shadow: inset 0 0 0 1px var(--_line);
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+[data-torch-a11y="panel"] [data-part="switch"]::before {
+  content: "";
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 999px;
+  background: var(--_knob);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+  transition:
+    transform 200ms var(--_ease),
+    background-color 200ms ease;
+}
+[data-torch-a11y="panel"] [data-part="switch"]:checked {
+  background: var(--_fg);
+}
+[data-torch-a11y="panel"] [data-part="switch"]:checked::before {
+  background: var(--_surface);
+  transform: translateX(1.125rem);
+}
+:root[data-a11y-motion="reduce"] [data-torch-a11y="panel"] [data-part="switch"]::before {
+  transition: background-color 200ms ease;
+}
+
+[data-torch-a11y="panel"] [data-part="reset"] {
+  display: block;
+  width: 100%;
+  height: 2.5rem;
+  margin-top: 0.75rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  background: var(--_fill);
+  transition:
+    transform 160ms var(--_ease),
+    background-color 200ms ease;
+}
+
+[data-torch-a11y="panel"] :is([data-part="close"], [data-part="reset"], [data-part="stepper"] button):active:not(
+    [aria-disabled="true"]
+  ) {
+  transform: scale(0.95);
+}
+[data-torch-a11y="panel"] [aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: default;
+}
+[data-torch-a11y="panel"] :is(button, [data-part="switch"]):focus-visible {
+  outline: var(--_ring) solid var(--_fg);
+  outline-offset: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-torch-a11y="panel"] [data-part="close"]:hover {
+    color: var(--_fg);
+  }
+  [data-torch-a11y="panel"] :is([data-part="stepper"] button, [data-part="reset"]):not([aria-disabled="true"]):hover {
     background: var(--_fill-hover);
-    box-shadow: inset 0 0 0 1px var(--_line);
-    cursor: pointer;
-    transition: background-color 200ms ease;
+  }
+}
+
+/* Windows high contrast and other forced colors: backgrounds vanish, so
+   outlines carry the shapes and the system's highlight marks "on". */
+@media (forced-colors: active) {
+  [data-torch-a11y="trigger"],
+  [data-torch-a11y="panel"] {
+    border: 1px solid CanvasText;
+  }
+  [data-torch-a11y="panel"] [data-part="switch"] {
+    border: 1px solid CanvasText;
   }
   [data-torch-a11y="panel"] [data-part="switch"]::before {
-    content: "";
-    position: absolute;
-    top: 0.1875rem;
-    left: 0.1875rem;
-    width: 1.375rem;
-    height: 1.375rem;
-    border-radius: 999px;
-    background: var(--_knob);
-    box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
-    transition:
-      transform 200ms var(--_ease),
-      background-color 200ms ease;
+    background: CanvasText;
   }
   [data-torch-a11y="panel"] [data-part="switch"]:checked {
-    background: var(--_fg);
+    background: Highlight;
   }
   [data-torch-a11y="panel"] [data-part="switch"]:checked::before {
-    background: var(--_surface);
-    transform: translateX(1.125rem);
+    background: HighlightText;
   }
-  :root[data-a11y-motion="reduce"] [data-torch-a11y="panel"] [data-part="switch"]::before {
-    transition: background-color 200ms ease;
-  }
+}
 
-  [data-torch-a11y="panel"] [data-part="reset"] {
-    display: block;
-    width: 100%;
-    height: 2.5rem;
-    margin-top: 0.75rem;
-    border-radius: 999px;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    background: var(--_fill);
-    transition:
-      transform 160ms var(--_ease),
-      background-color 200ms ease;
-  }
-
-  [data-torch-a11y="panel"] :is([data-part="close"], [data-part="reset"], [data-part="stepper"] button):active:not(
-      [aria-disabled="true"]
-    ) {
-    transform: scale(0.95);
-  }
-  [data-torch-a11y="panel"] [aria-disabled="true"] {
-    opacity: 0.4;
-    cursor: default;
-  }
-  [data-torch-a11y="panel"] :is(button, [data-part="switch"]):focus-visible {
-    outline: var(--_ring) solid var(--_fg);
-    outline-offset: 2px;
-  }
-  @media (hover: hover) and (pointer: fine) {
-    [data-torch-a11y="panel"] [data-part="close"]:hover {
-      color: var(--_fg);
-    }
-    [data-torch-a11y="panel"] :is([data-part="stepper"] button, [data-part="reset"]):not([aria-disabled="true"]):hover {
-      background: var(--_fill-hover);
-    }
-  }
-
-  /* Windows high contrast and other forced colors: backgrounds vanish, so
-     outlines carry the shapes and the system's highlight marks "on". */
-  @media (forced-colors: active) {
-    [data-torch-a11y="trigger"],
-    [data-torch-a11y="panel"] {
-      border: 1px solid CanvasText;
-    }
-    [data-torch-a11y="panel"] [data-part="switch"] {
-      border: 1px solid CanvasText;
-    }
-    [data-torch-a11y="panel"] [data-part="switch"]::before {
-      background: CanvasText;
-    }
-    [data-torch-a11y="panel"] [data-part="switch"]:checked {
-      background: Highlight;
-    }
-    [data-torch-a11y="panel"] [data-part="switch"]:checked::before {
-      background: HighlightText;
-    }
-  }
-
-  @media print {
-    [data-torch-a11y] {
-      display: none !important;
-    }
+@media print {
+  [data-torch-a11y] {
+    display: none !important;
   }
 }
