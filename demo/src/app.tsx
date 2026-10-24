@@ -121,8 +121,11 @@ initA11y(); // before the first render`}</Code>
           </Section>
 
           <Section title="Agent skill">
-            <p>Audits your codebase for px text, hardcoded colors and motion queries, fixes them, and checks the result.</p>
-            <Command>npx torch-a11y add-skill</Command>
+            <p>
+              Audits your codebase for px text, hardcoded colors and motion queries, fixes them, and
+              checks the result. The installer finds your agents and asks where it should go.
+            </p>
+            <Command>npx torch-a11y init</Command>
           </Section>
         </main>
 

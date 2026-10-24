@@ -210,10 +210,12 @@ What you can't turn off: the dialog's focus handling, its labels and roles, and 
 The panel is the easy part. The skill prepares the codebase: it audits px sizes, hardcoded colors and motion queries, converts them, adds high-contrast token values, then verifies by keyboard, at 200%, in both color schemes.
 
 ```bash
-npx torch-a11y add-skill
+npx torch-a11y init
 ```
 
-That copies it into `.claude/skills/torch-a11y` for Claude Code. For other agents, use `--dir` to point at their skills folder. Then ask: "Set up torch-a11y on this site."
+It asks which agents get the skill, with the ones it finds on your machine ticked: Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot, Windsurf, OpenCode, Amp, Cline, Zed, Kiro, Roo Code and Goose. Then whether it goes in this project (committed, so your team gets it) or on your machine, and offers to add the package with your package manager. Then ask your agent: "Set up torch-a11y on this site."
+
+`-y` takes the defaults without asking: detected agents, this project, add the package. To choose without prompts: `--agents codex,cursor`, `--global`, `--dir <skills folder>`, `--no-install`. `add-skill` is an alias.
 
 ## The panel itself
 

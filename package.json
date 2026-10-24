@@ -22,22 +22,22 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "torch-a11y": "./bin/torch-a11y.mjs"
+    "torch-a11y": "./dist/cli.js"
   },
   "files": [
     "dist",
     "styles",
     "fonts",
-    "bin",
     "skills",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "tsup >/dev/null && vitest run",
     "demo": "bun run demo:pack && cd demo && bun run dev",
     "prepublishOnly": "bun run typecheck && bun run test && bun run build",
     "demo:pack": "bun run build && rm -rf demo/.pkg && mkdir -p demo/.pkg && npm pack --pack-destination demo/.pkg >/dev/null && cd demo && bun install && rm -rf node_modules/torch-a11y && mkdir -p node_modules/torch-a11y && tar -xzf .pkg/torch-a11y-*.tgz -C node_modules/torch-a11y --strip-components=1 && find node_modules/torch-a11y -exec touch {} +"
@@ -73,6 +73,7 @@
     }
   },
   "devDependencies": {
+    "@clack/prompts": "^1.8.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^22.20.5",
     "@types/react": "^19.3.0",
