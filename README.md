@@ -61,6 +61,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ### Vite, or any client-only React app
 
+`initA11y()` alone runs in the bundled script, after first paint, so a saved high contrast setting can flash the default styles first. Put the inline `a11yScript()` output (the same script `<A11yScript />` renders) in the `<head>` of `index.html`, before the CSS and the app bundle, with a small Vite `transformIndexHtml` plugin:
+
+```ts
+// vite.config.ts
+import { a11yScript } from "torch-a11y";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [
+    {
+      name: "torch-a11y",
+      transformIndexHtml() {
+        return [
+          {
+            tag: "script",
+            children: a11yScript(),
+            injectTo: "head-prepend",
+          },
+        ];
+      },
+    },
+  ],
+});
+```
+
+Still call `initA11y()` before the first render, and render `<A11yPanel />` at the top of your app.
+
 ```tsx
 // src/main.tsx
 import { initA11y } from "torch-a11y";
@@ -70,8 +97,6 @@ initA11y(); // before the first render
 
 createRoot(document.getElementById("root")!).render(<App />);
 ```
-
-Then render `<A11yPanel />` at the top of your app.
 
 ### Tailwind CSS v4
 
